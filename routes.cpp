@@ -23,7 +23,7 @@ crow::response add(const crow::request &req)
         response["result"] = result;
 
         return crow::response{crow::json::dump(response)};
-    } catch (const std::exception &e) {
+    } catch (const std::exception &e){
         return crow::response(400, e.what());
     }
 }
