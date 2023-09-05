@@ -1,54 +1,60 @@
 #include "crow_all.h"
+#include <iostream>
 
-crow::response greet()
-{
-    return crow::response{"Hello world!"}; // Return a greeting
+void greet(const crow::request&, crow::response& res) {
+    res.code = 200;
+    res.write("Hello world!");
+    res.end();
 }
 
-crow::response add(const crow::request &req)
-{
+void add(const crow::request& req, crow::response& res) {
     try {
-        auto input = crow::json::load(req.body);
-
-        if (!input) {
-            throw std::runtime_error("Invalid JSON input");
+        // Parse JSON request body
+        auto json = crow::json::load(req.body);
+        if (!json) {
+            throw std::runtime_error("Invalid JSON");
         }
 
-        double first = input["first"].d();
-        double second = input["second"].d();
+        double first = json["first"].d();
+        double second = json["second"].d();
 
         double result = first + second;
 
         crow::json::wvalue response;
         response["result"] = result;
 
-        return crow::response{crow::json::dump(response)};
-    } catch (const std::exception &e){
-        return crow::response(400, e.what());
+        res.code = 200;
+        res.write(crow::json::dump(response));
+        res.end();
+    } catch (const std::exception& e) {
+        res.code = 400;
+        res.write(e.what());
+        res.end();
     }
 }
 
-crow::response subtract(const crow::request &req)
-{
+void subtract(const crow::request& req, crow::response& res) {
     try {
-        auto input = crow::json::load(req.body);
-
-        if (!input) {
-            throw std::runtime_error("Invalid JSON input");
+        // Parse JSON request body
+        auto json = crow::json::load(req.body);
+        if (!json) {
+            throw std::runtime_error("Invalid JSON");
         }
 
-        double first = input["first"].d();
-        double second = input["second"].d();
+        double first = json["first"].d();
+        double second = json["second"].d();
 
         double result = first - second;
 
         crow::json::wvalue response;
         response["result"] = result;
 
-        return crow::response{crow::json::dump(response)};
-    } catch (const std::exception &e) {
-        return crow::response(400, e.what());
+        res.code = 200;
+        res.write(crow::json::dump(response));
+        res.end();
+    } catch (const std::exception& e) {
+        res.code = 400;
+        res.write(e.what());
+        res.end();
     }
 }
-
-
