@@ -1,7 +1,7 @@
 FROM gradle:7.2.0-jdk17 as builder
 WORKDIR /home/app
 
-COPY . .
+COPY . .a
 
 RUN gradle buildLayers
 
